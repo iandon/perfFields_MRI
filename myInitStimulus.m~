@@ -85,8 +85,7 @@ alphaLayer =  255*pointOp(res, Ytbl, Xtbl(1), Xtbl(2)-Xtbl(1), 0);
 
 scaleMTX1 = (size(g,1)/stimulus.sizeGrating);
 scaleMTX2 = (size(g,2)/stimulus.sizeGrating);
-rectWidthPIX1 = floor(scaleMTX1*rect_width);
-rectWidthPIX2 = floor(scaleMTX2*rect_width);
+rectWidthPIX = floor(scaleMTX*rect_width);
 rectRng1 = cell(length(cuts),1);
 rectRng2 = cell(length(cuts),1);
 for pos = 2:length(cuts)
@@ -97,17 +96,17 @@ for pos = 2:length(cuts)
         rectRng1{posIndex} = 1:edge1;
         rectRng2{posIndex} = 1:edge2;
     elseif pos < length(cuts)
-        rectRng1{posIndex} = edge1-rectWidthPIX1+1:edge1;
-        rectRng2{posIndex} = edge2-rectWidthPIX2+1:edge2;
+        rectRng1{posIndex} = edge1-rectWidthPIX+1:edge1;
+        rectRng2{posIndex} = edge2-rectWidthPIX+1:edge2;
     else
-        rectRng1{posIndex} = size(g,1)-rectWidthPIX1+1:size(g,1);
-        rectRng2{posIndex} = size(g,2)-rectWidthPIX2+1:size(g,2);
+        rectRng1{posIndex} = size(g,1)-rectWidthPIX+1:size(g,1);
+        rectRng2{posIndex} = size(g,2)-rectWidthPIX+1:size(g,2);
     end
 end
 
 contVect = [1,-1];%repmat([1,-1],[1,2]);
-% g4  = cell(length(cuts)-1,length(contVect));
-% g4b = cell(length(cuts)-1,length(contVect));
+g4  = cell(length(cuts)-1,length(contVect));
+g4b = cell(length(cuts)-1,length(contVect));
 tex = cell(length(cuts)-1,length(contVect),2);
 
 disppercent(-inf,'Calculating gabors');
@@ -118,28 +117,27 @@ for tt = 1:stimulus.numTrials
         for pos = 1:(length(cuts)-1)
             posIndex=pos;
             ph = rand*360; stimulus.phase(tt,sweep,pos) = ph;
-%             g4  = cell(length(cuts)-1,length(contVect));
-%             g4b = cell(length(cuts)-1,length(contVect));
             for phaseCont = 1:length(contVect)
                 g = mglMakeGrating(stimulus.sizeGrating,stimulus.sizeGrating,stimulus.sf,ori,ph).*contVect(phaseCont);
                 g = 255*(g+1)/2;
 %                 g(g<0)=0;
-                g4(:,:,1) = g;
-                g4(:,:,2) = g;
-                g4(:,:,3) = g;
-                g4(:,:,4) = alphaLayer;
+                g4{posIndex,phaseCont}(:,:,1) = g;
+                g4{posIndex,phaseCont}(:,:,2) = g;
+                g4{posIndex,phaseCont}(:,:,3) = g;
+                g4{posIndex,phaseCont}(:,:,4) = alphaLayer;
                 
-                g4b = g4;
-                g4b(:,:,4) = g4(:,:,4).*0;
+                g4b{posIndex,phaseCont} = g4{posIndex,phaseCont};
+                g4b{posIndex,phaseCont}(:,:,4) = g4{posIndex,phaseCont}(:,:,4).*0;
                 
                 if sweepDir <= 2 %right or left sweep
-                    g4b(:,rectRng2{posIndex},4) = g4(:,rectRng2{posIndex},4);
+                    g4b{posIndex,phaseCont}(:,rectRng1{posIndex},4) = g4{posIndex,phaseCont}(:,rectRng1{posIndex},4);
                 else                 %up or down sweep
-                    g4b(rectRng1{posIndex},:,4) = g4(rectRng1{posIndex},:,4);
+                    g4b{posIndex,phaseCont}(rectRng2{posIndex},:,4) = g4{posIndex,phaseCont}(rectRng2{posIndex},:,4);
                 end
-                stimulus.tex{posIndex,phaseCont,sweep,tt} = mglCreateTexture(g4b,[],1);
+                stimulus.tex{posIndex,phaseCont,sweep,tt} = mglCreateTexture(g4b{posIndex,phaseCont},[],1);
 %                 mglBindTexture(stimulus.tex{posIndex,phaseCont,sweep,tt},g4b{posIndex,phaseCont});
-                clear g4 g4b
+                g4  = cell(length(cuts)-1,length(contVect));
+                g4b = cell(length(cuts)-1,length(contVect));
             end
 %             sprintf('Constructed texture %d of %d',pos,length(cuts))```
         end
