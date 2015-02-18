@@ -19,7 +19,7 @@ stimulus.ypxpdeg = ceil(tan(2*pi/360)*myscreen.displayDistance*stimulus.ypxpcm);
 
 
 stimulus.frameThick = .08;
-stimulus.reservedColors = [0 0 0 ; 0 0 0; 0 0 0]%[0 0 0; 1 1 1; 0 .6 0];
+stimulus.reservedColors = [0 0 0 ; 0 0 0; 0 0 0];%[0 0 0; 1 1 1; 0 .6 0];
 
 
 stimulus.nReservedColors=size(stimulus.reservedColors,1);
