@@ -87,8 +87,8 @@ fixStimulus.pos = [0 0];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 task{2}{1}.waitForBacktick = 1;
-task{2}{1}.segmin =     [12,1.48.*ones(1,33)];
-task{2}{1}.segmax =     [12,1.52.*ones(1,33)];  
+task{2}{1}.segmin =     [12,1.48,1.5.*ones(1,32)];
+task{2}{1}.segmax =     [12,1.52,1.5.*ones(1,32)];  
 task{2}{1}.segquant =   zeros(size(task{2}{1}.segmin));
 task{2}{1}.getResponse = zeros(size(task{2}{1}.segmin));
 
@@ -125,6 +125,7 @@ end
 
 task{2}{1}.randVars.len_ = numTrials;
 task{2}{1}.randVars.trialNum = 1:numTrials;
+task{2}{1}.numTrials = numTrials;
 stimulus.sf = sf;
 stimulus.trialNum=0;
 stimulus.dir = dir;
@@ -153,7 +154,7 @@ myscreen = eyeCalibDisp(myscreen);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 mglSimulateRun(TR,164,0)
 phaseNum = 1;
-while (phaseNum <= length(task)) && ~myscreen.userHitEsc
+while (phaseNum <= length(task{2})) && ~myscreen.userHitEsc
     % update the task
     % runs automatically the task, you only need to change: StartSegmentCallback,DrawStimulusCallback,responseCallback
     [task{2},myscreen,phaseNum] = updateTask(task{2},myscreen,phaseNum);
