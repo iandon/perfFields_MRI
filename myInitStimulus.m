@@ -55,9 +55,9 @@ stimulus.grayColor = stimulus.background;
 % stimulus parameters:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % gabors
-stimulus.width = 24;% bigger than filter size        % in deg
-stimulus.height = 24;% bigger than filter size           % in deg
-stimulus.sizeGrating = 24;%should be reset to 3degs
+stimulus.sizeGrating = 22;
+stimulus.width = stimulus.sizeGrating;% bigger than filter size        % in deg
+stimulus.height = stimulus.sizeGrating;% bigger than filter size           % in deg
 
 stimulus.rotation = [1,-1]; % this is the tilt orientation of the gabor stimulus from vertical in Degrees
 stimulus.init = 1;
