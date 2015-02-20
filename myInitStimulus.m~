@@ -55,9 +55,9 @@ stimulus.grayColor = stimulus.background;
 % stimulus parameters:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % gabors
-stimulus.width = 24;% bigger than filter size        % in deg
-stimulus.height = 24;% bigger than filter size           % in deg
-stimulus.sizeGrating = 24;%should be reset to 3degs
+stimulus.sizeGrating = 24;
+stimulus.width = stimulus.sizeGrating;% bigger than filter size        % in deg
+stimulus.height = stimulus.sizeGrating;% bigger than filter size           % in deg
 
 stimulus.rotation = [1,-1]; % this is the tilt orientation of the gabor stimulus from vertical in Degrees
 stimulus.init = 1;
@@ -68,7 +68,8 @@ num_points = 9;
 rect_width = 3;
 cuts = (stimulus.sizeGrating/2)*linspace(0,1, num_points).^2;
 cuts = sort([-cuts setdiff(cuts,0)]);
-
+stimulus.cuts = cuts;
+stimulus.rect_width = rect_width;
 
 
 
@@ -133,13 +134,15 @@ for tt = 1:stimulus.numTrials
                 g4b(:,:,4) = g4(:,:,4).*0;
                 
                 if sweepDir <= 2 %right or left sweep
-                    g4b(:,rectRng2{posIndex},4) = g4(:,rectRng2{posIndex},4);
+%                     g4b(:,rectRng2{posIndex},4) = g4(:,rectRng2{posIndex},4);
+                    g4c = g4(:,rectRng2{posIndex},:);
                 else                 %up or down sweep
-                    g4b(rectRng1{posIndex},:,4) = g4(rectRng1{posIndex},:,4);
+%                     g4b(rectRng1{posIndex},:,4) = g4(rectRng1{posIndex},:,4);
+                    g4c = g4(rectRng1{posIndex},:,:);
                 end
-                stimulus.tex{posIndex,phaseCont,sweep,tt} = mglCreateTexture(g4b,[],1);
-%                 mglBindTexture(stimulus.tex{posIndex,phaseCont,sweep,tt},g4b{posIndex,phaseCont});
-                clear g4 g4b
+%                 stimulus.tex{posIndex,phaseCont,sweep,tt} = mglCreateTexture(g4b,[],1);
+                stimulus.tex2{posIndex,phaseCont,sweep,tt} = mglCreateTexture(g4c,[],1);
+                clear g4 g4b g4c
             end
 %             sprintf('Constructed texture %d of %d',pos,length(cuts))```
         end
